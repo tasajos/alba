@@ -1,0 +1,25 @@
+.toolbar{
+  display:flex; gap:10px; margin-bottom:12px;
+  input{
+    flex:1; padding:10px; border-radius:12px; border:1px solid #e9eef5;
+    outline:none;
+  }
+  button{
+    padding:10px 14px; border-radius:12px; border:0;
+    font-weight:700; background:#0b3b77; color:#fff; cursor:pointer;
+  }
+}
+
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0 10px;
+  thead th{ text-align:left; color:#5b6b80; font-weight:700; }
+  tbody tr{
+    background:#fff;
+    border:1px solid #e9eef5;
+  }
+  td{ padding:10px 8px; }
+}
+
+.muted{ color:#5b6b80; }

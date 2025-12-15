@@ -1,0 +1,12 @@
+.nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 18px; border-bottom:1px solid #e9eef5; background:#fff;
+  position:sticky; top:0; z-index:10;
+}
+.brand{ font-weight:800; letter-spacing:.5px; font-size:18px; color:#0b3b77; }
+.links{ display:flex; gap:14px; }
+.links a{
+  text-decoration:none; color:#2d3b4f; font-weight:600;
+  padding:8px 10px; border-radius:10px;
+}
+.links a.active{ background:#eef5ff; color:#0b3b77; }

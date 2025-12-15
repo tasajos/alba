@@ -1,0 +1,43 @@
+<div class="card">
+  <h2 class="title">Pacientes</h2>
+
+  <div class="toolbar">
+    <input
+      [(ngModel)]="q"
+      type="text"
+      placeholder="Buscar por nombre, apellido o CI"
+      (keyup.enter)="buscar()"
+    />
+    <button (click)="buscar()">Buscar</button>
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="loading" class="loading">
+    Cargando...
+  </div>
+
+  <!-- Tabla -->
+  <table *ngIf="!loading && data.length">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre completo</th>
+        <th>CI</th>
+        <th>Teléfono</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of data">
+        <td>{{ p.id }}</td>
+        <td>{{ p.nombre }} {{ p.apellido }}</td>
+        <td>{{ p.ci || '-' }}</td>
+        <td>{{ p.telefono || '-' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Sin resultados -->
+  <div *ngIf="!loading && data.length === 0" class="muted">
+    Sin resultados
+  </div>
+</div>
