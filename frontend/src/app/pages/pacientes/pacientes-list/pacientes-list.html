@@ -1,6 +1,10 @@
 <div class="card">
   <h2 class="title">Pacientes</h2>
 
+  <div class="top-actions">
+    <button class="new" (click)="openNew()">+ Nuevo paciente</button>
+  </div>
+
   <div class="toolbar">
     <input
       [(ngModel)]="q"
@@ -11,12 +15,8 @@
     <button (click)="buscar()">Buscar</button>
   </div>
 
-  <!-- Cargando -->
-  <div *ngIf="loading" class="loading">
-    Cargando...
-  </div>
+  <div *ngIf="loading" class="loading">Cargando...</div>
 
-  <!-- Tabla -->
   <table *ngIf="!loading && data.length">
     <thead>
       <tr>
@@ -24,20 +24,38 @@
         <th>Nombre completo</th>
         <th>CI</th>
         <th>Teléfono</th>
+        <th>Acciones</th>
       </tr>
     </thead>
+
     <tbody>
       <tr *ngFor="let p of data">
         <td>{{ p.id }}</td>
         <td>{{ p.nombre }} {{ p.apellido }}</td>
         <td>{{ p.ci || '-' }}</td>
         <td>{{ p.telefono || '-' }}</td>
+        <td class="actions">
+          <button (click)="openEdit(p)">Editar</button>
+          <button (click)="eliminar(p)">Eliminar</button>
+        </td>
       </tr>
     </tbody>
   </table>
 
-  <!-- Sin resultados -->
   <div *ngIf="!loading && data.length === 0" class="muted">
     Sin resultados
   </div>
 </div>
+
+<app-pacientes-form
+  [open]="modalOpen"
+  [editing]="editing"
+  (closed)="closeModal()"
+  (saved)="refresh()"
+></app-pacientes-form>
+
+<app-success-modal
+  [open]="successOpen"
+  [message]="successMessage"
+  (closed)="successOpen = false"
+></app-success-modal>

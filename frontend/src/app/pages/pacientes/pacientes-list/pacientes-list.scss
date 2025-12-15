@@ -23,3 +23,90 @@ table{
 }
 
 .muted{ color:#5b6b80; }
+
+.actions { display:flex; gap:8px; }
+.actions button { padding:8px 10px; border-radius:10px; border:0; cursor:pointer; }
+
+.card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(15, 30, 60, 0.08);
+}
+
+.title {
+  color: #0b3b77;
+  font-weight: 800;
+}
+
+.top-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.new {
+  background: #0b3b77;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.toolbar input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.toolbar button {
+  background: #0b3b77;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  text-align: left;
+  font-size: 13px;
+  color: #475569;
+  padding-bottom: 10px;
+}
+
+tbody tr {
+  border-top: 1px solid #f1f5f9;
+}
+
+tbody td {
+  padding: 12px 4px;
+}
+
+.actions button {
+  background: #f1f5f9;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+.actions button:hover {
+  background: #e2e8f0;
+}
