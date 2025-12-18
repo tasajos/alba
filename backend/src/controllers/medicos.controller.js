@@ -1,60 +1,97 @@
-const pool = require("../db");
-const asyncHandler = require("../utils/asyncHandler");
+const db = require("../db");
 
-const toInt = (v, def) => {
-  const n = parseInt(v, 10);
-  return Number.isFinite(n) ? n : def;
+// GET /api/medicos?q=
+exports.listar = async (req, res) => {
+  try {
+    const q = (req.query.q || "").trim();
+
+    let sql = "SELECT * FROM medicos";
+    let params = [];
+
+    if (q) {
+      const like = `%${q}%`;
+      sql += " WHERE nombre LIKE ? OR apellido LIKE ? OR ci LIKE ? OR especialidad LIKE ?";
+      params = [like, like, like, like];
+    }
+
+    sql += " ORDER BY id DESC";
+
+    const [rows] = await db.query(sql, params);
+    return res.json({ ok: true, data: rows });
+  } catch (err) {
+    console.error("listar medicos error:", err);
+    return res.status(500).json({ ok: false, error: "Error en la base de datos" });
+  }
 };
 
-exports.listar = asyncHandler(async (req, res) => {
-  const q = (req.query.q || "").trim();
-  let sql = `SELECT id, nombre, apellido, especialidad, telefono, created_at FROM medicos`;
-  const params = [];
-  if (q) {
-    sql += ` WHERE nombre LIKE ? OR apellido LIKE ? OR especialidad LIKE ?`;
-    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
+// GET /api/medicos/:id
+exports.obtener = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const [rows] = await db.query("SELECT * FROM medicos WHERE id = ?", [id]);
+    if (!rows.length) return res.status(404).json({ ok: false, error: "No encontrado" });
+    return res.json({ ok: true, data: rows[0] });
+  } catch (err) {
+    console.error("obtener medico error:", err);
+    return res.status(500).json({ ok: false, error: "Error en la base de datos" });
   }
-  sql += ` ORDER BY id DESC`;
-  const [rows] = await pool.query(sql, params);
-  res.json({ ok: true, data: rows });
-});
+};
 
-exports.obtener = asyncHandler(async (req, res) => {
-  const id = toInt(req.params.id);
-  const [rows] = await pool.query(`SELECT * FROM medicos WHERE id=?`, [id]);
-  if (!rows.length) return res.status(404).json({ ok: false, error: "Médico no encontrado" });
-  res.json({ ok: true, data: rows[0] });
-});
+// POST /api/medicos
+exports.crear = async (req, res) => {
+  try {
+    const { nombre, apellido, ci, especialidad, telefono, email } = req.body;
 
-exports.crear = asyncHandler(async (req, res) => {
-  const { nombre, apellido, especialidad, telefono } = req.body;
-  if (!nombre || !apellido)
-    return res.status(400).json({ ok: false, error: "nombre y apellido son obligatorios" });
+    if (!nombre || !apellido || !especialidad) {
+      return res.status(400).json({
+        ok: false,
+        error: "nombre, apellido y especialidad son obligatorios",
+      });
+    }
 
-  const [r] = await pool.query(
-    `INSERT INTO medicos (nombre, apellido, especialidad, telefono)
-     VALUES (?, ?, ?, ?)`,
-    [nombre, apellido, especialidad || null, telefono || null]
-  );
-  res.status(201).json({ ok: true, id: r.insertId });
-});
+    const [r] = await db.query(
+      `INSERT INTO medicos (nombre, apellido, ci, especialidad, telefono, email)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [nombre, apellido, ci || null, especialidad, telefono || null, email || null]
+    );
 
-exports.actualizar = asyncHandler(async (req, res) => {
-  const id = toInt(req.params.id);
-  const { nombre, apellido, especialidad, telefono } = req.body;
+    return res.status(201).json({ ok: true, id: r.insertId });
+  } catch (err) {
+    console.error("crear medico error:", err);
+    return res.status(500).json({ ok: false, error: "Error en la base de datos" });
+  }
+};
 
-  const [r] = await pool.query(
-    `UPDATE medicos SET nombre=?, apellido=?, especialidad=?, telefono=? WHERE id=?`,
-    [nombre, apellido, especialidad || null, telefono || null, id]
-  );
+// PUT /api/medicos/:id
+exports.actualizar = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const { nombre, apellido, ci, especialidad, telefono, email } = req.body;
 
-  if (!r.affectedRows) return res.status(404).json({ ok: false, error: "Médico no encontrado" });
-  res.json({ ok: true });
-});
+    const [r] = await db.query(
+      `UPDATE medicos
+       SET nombre = ?, apellido = ?, ci = ?, especialidad = ?, telefono = ?, email = ?
+       WHERE id = ?`,
+      [nombre, apellido, ci || null, especialidad, telefono || null, email || null, id]
+    );
 
-exports.eliminar = asyncHandler(async (req, res) => {
-  const id = toInt(req.params.id);
-  const [r] = await pool.query(`DELETE FROM medicos WHERE id=?`, [id]);
-  if (!r.affectedRows) return res.status(404).json({ ok: false, error: "Médico no encontrado" });
-  res.json({ ok: true });
-});
+    if (r.affectedRows === 0) return res.status(404).json({ ok: false, error: "No encontrado" });
+    return res.json({ ok: true });
+  } catch (err) {
+    console.error("actualizar medico error:", err);
+    return res.status(500).json({ ok: false, error: "Error en la base de datos" });
+  }
+};
+
+// DELETE /api/medicos/:id
+exports.eliminar = async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const [r] = await db.query("DELETE FROM medicos WHERE id = ?", [id]);
+    if (r.affectedRows === 0) return res.status(404).json({ ok: false, error: "No encontrado" });
+    return res.json({ ok: true });
+  } catch (err) {
+    console.error("eliminar medico error:", err);
+    return res.status(500).json({ ok: false, error: "Error en la base de datos" });
+  }
+};

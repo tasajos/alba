@@ -21,6 +21,7 @@ const recetasRoutes = require("./routes/recetas.routes");
 const examenesRoutes = require("./routes/examenes.routes");
 const ordenesLabRoutes = require("./routes/ordeneslab.routes");
 
+
 const errorHandler = require("./middlewares/errorHandler");
 
 const app = express(); // ✅ AQUÍ se define app
@@ -48,6 +49,7 @@ app.use("/api/stock", stockRoutes);
 app.use("/api/recetas", recetasRoutes);
 app.use("/api/examenes", examenesRoutes);
 app.use("/api/lab/ordenes", ordenesLabRoutes);
+app.use('/api/medicos', medicosRoutes);
 
 // Error handler (al final)
 app.use(errorHandler);

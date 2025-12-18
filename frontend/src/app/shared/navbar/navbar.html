@@ -1,8 +1,16 @@
-<nav class="nav">
+<nav class="navbar">
   <div class="brand">ALBA</div>
 
   <div class="links">
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
-    <a routerLink="/pacientes" routerLinkActive="active">Pacientes</a>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      Dashboard
+    </a>
+
+    <a routerLink="/pacientes" routerLinkActive="active">
+      Pacientes
+    </a>
+
+    <a routerLink="/medicos" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Médicos</a>
+
   </div>
 </nav>
