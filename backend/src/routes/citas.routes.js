@@ -1,9 +1,7 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const c = require("../controllers/citas.controller");
 
 router.get("/", c.listar);
-router.get("/:id", c.obtener);
 router.post("/", c.crear);
 router.put("/:id", c.actualizar);
 router.delete("/:id", c.eliminar);
