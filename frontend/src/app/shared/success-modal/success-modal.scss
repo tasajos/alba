@@ -1,0 +1,46 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+
+.modal {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  width: 320px;
+  text-align: center;
+  z-index: 101;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+}
+
+.icon {
+  font-size: 48px;
+  color: #2e7d32;
+  margin-bottom: 12px;
+}
+
+h3 {
+  margin: 0;
+  color: #0b3b77;
+}
+
+p {
+  margin: 12px 0 20px;
+  color: #4b5563;
+}
+
+button {
+  background: #0b3b77;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}

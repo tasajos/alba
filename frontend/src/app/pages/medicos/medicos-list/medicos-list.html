@@ -1,0 +1,66 @@
+<div class="card">
+  <h2 class="title">Médicos</h2>
+
+  <div class="top-actions">
+  <button class="btn-primary" (click)="openNew()">+ Nuevo médico</button>
+</div>
+
+  <div class="toolbar">
+    <input
+      [(ngModel)]="q"
+      type="text"
+      placeholder="Buscar por nombre, apellido, CI o especialidad"
+      (keyup.enter)="buscar()"
+    />
+    <button (click)="buscar()">Buscar</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Cargando...
+  </div>
+
+  <table *ngIf="!loading && data.length">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre completo</th>
+        <th>Especialidad</th>
+        <th>CI</th>
+        <th>Teléfono</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of data">
+        <td>{{ m.id }}</td>
+        <td>{{ m.nombre }} {{ m.apellido }}</td>
+        <td>{{ m.especialidad }}</td>
+        <td>{{ m.ci }}</td>
+        <td>{{ m.telefono }}</td>
+        <td class="actions">
+          <button (click)="openEdit(m)">Editar</button>
+          <button (click)="eliminar(m)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && data.length === 0" class="muted">
+    Sin resultados
+  </div>
+</div>
+
+<!-- ✅ FORM MODAL -->
+<app-medicos-form
+  [open]="modalOpen"
+  [editing]="editing"
+  (closed)="closeModal()"
+  (saved)="refresh()"
+></app-medicos-form>
+
+<!-- ✅ SUCCESS MODAL -->
+<app-success-modal
+  [open]="successOpen"
+  [message]="successMessage"
+  (closed)="successOpen = false"
+></app-success-modal>

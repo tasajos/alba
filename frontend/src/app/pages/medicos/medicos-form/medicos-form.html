@@ -1,0 +1,49 @@
+<div class="backdrop" *ngIf="open" (click)="close()"></div>
+
+<div class="modal" *ngIf="open">
+  <div class="header">
+    <div class="title">{{ editing ? 'Editar médico' : 'Nuevo médico' }}</div>
+    <button class="x" (click)="close()">✕</button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="body">
+    <div class="grid">
+      <div class="field">
+        <label>Nombre *</label>
+        <input formControlName="nombre" placeholder="Ej: Andrea" />
+      </div>
+
+      <div class="field">
+        <label>Apellido *</label>
+        <input formControlName="apellido" placeholder="Ej: Rojas" />
+      </div>
+
+      <div class="field">
+        <label>CI</label>
+        <input formControlName="ci" placeholder="Ej: 6543211" />
+      </div>
+
+      <div class="field">
+        <label>Especialidad *</label>
+        <input formControlName="especialidad" placeholder="Ej: Medicina interna" />
+      </div>
+
+      <div class="field">
+        <label>Teléfono</label>
+        <input formControlName="telefono" placeholder="Ej: 70123456" />
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <input formControlName="email" placeholder="Ej: doctor@correo.com" />
+      </div>
+    </div>
+
+    <div class="footer">
+      <button type="button" class="btn secondary" (click)="close()">Cancelar</button>
+      <button type="submit" class="btn primary" [disabled]="saving">
+        {{ saving ? 'Guardando...' : (editing ? 'Actualizar' : 'Crear') }}
+      </button>
+    </div>
+  </form>
+</div>
