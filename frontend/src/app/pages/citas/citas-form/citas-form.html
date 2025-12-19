@@ -1,0 +1,88 @@
+<div class="modal-backdrop" *ngIf="open" (click)="close()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ editing ? 'Editar cita' : 'Nueva cita' }}</h3>
+      <button class="x" type="button" (click)="close()">✕</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="modal-body">
+      <!-- Paciente -->
+      <label>Paciente</label>
+      <div class="auto">
+        <input
+          formControlName="paciente_search"
+          placeholder="Buscar paciente por nombre, apellido o CI..."
+          (input)="onPacienteTyping()"
+          (blur)="onPacienteBlur()"
+          (focus)="showPacientes = true"
+          autocomplete="off"
+        />
+
+        <div class="dropdown" *ngIf="showPacientes && pacientesOptions.length">
+            <button
+         type="button"
+            class="opt"
+            *ngFor="let p of pacientesOptions"
+            (mousedown)="$event.preventDefault(); selectPaciente(p)"
+        >
+            <div class="line1">{{ p.nombre }} {{ p.apellido }}</div>
+            <div class="line2">CI: {{ p.ci || '-' }} — ID: {{ p.id }}</div>
+        </button>
+        </div>
+
+        <div class="hint" *ngIf="showPacientes && !pacientesOptions.length">
+          Escribe al menos 2 caracteres…
+        </div>
+      </div>
+
+      <!-- Médico -->
+      <label>Médico</label>
+      <div class="auto">
+        <input
+          formControlName="medico_search"
+          placeholder="Buscar médico por nombre, apellido, CI o especialidad..."
+          (input)="onMedicoTyping()"
+            (blur)="onMedicoBlur()"
+          (focus)="showMedicos = true"
+          autocomplete="off"
+        />
+
+      <div class="dropdown" *ngIf="showMedicos && medicosOptions.length">
+            <button
+                type="button"
+                class="opt"
+                *ngFor="let m of medicosOptions"
+                (mousedown)="$event.preventDefault(); selectMedico(m)"
+            >
+                <div class="line1">{{ m.nombre }} {{ m.apellido }}</div>
+                <div class="line2">{{ m.especialidad || '-' }} — CI: {{ m.ci || '-' }} — ID: {{ m.id }}</div>
+            </button>
+            </div>
+
+        <div class="hint" *ngIf="showMedicos && !medicosOptions.length">
+          Escribe al menos 2 caracteres…
+        </div>
+      </div>
+
+      <label>Fecha</label>
+      <input type="datetime-local" formControlName="fecha" />
+
+      <label>Motivo</label>
+      <input type="text" formControlName="motivo" placeholder="Ej. Control" />
+
+      <label>Estado</label>
+      <select formControlName="estado">
+        <option value="PROGRAMADA">PROGRAMADA</option>
+        <option value="ATENDIDA">ATENDIDA</option>
+        <option value="CANCELADA">CANCELADA</option>
+      </select>
+
+      <div class="modal-footer">
+        <button type="button" class="btn ghost" (click)="close()">Cancelar</button>
+        <button type="submit" class="btn primary" [disabled]="saving">
+          {{ saving ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

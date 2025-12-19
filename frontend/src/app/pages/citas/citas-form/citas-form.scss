@@ -1,0 +1,131 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 9999;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 16px;
+  overflow: auto;
+}
+
+/* ✅ IMPORTANTÍSIMO: el modal no debe exceder el viewport */
+.modal {
+  width: min(760px, calc(100vw - 32px));
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+
+  max-height: calc(100vh - 32px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-body {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  overflow: auto;
+}
+
+/* ✅ en móviles ajusta aún más */
+@media (max-width: 520px) {
+  .modal-backdrop { padding: 10px; }
+  .modal {
+    width: calc(100vw - 20px);
+    border-radius: 14px;
+  }
+  .modal-body { padding: 14px; }
+  .modal-header { padding: 14px 14px; }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid #eef2f7;
+
+  h3 { margin: 0; font-size: 18px; font-weight: 800; color: #0b2a4a; }
+}
+
+.x {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+.x:hover { background: #f2f6ff; }
+
+.modal-body {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+}
+
+label { font-weight: 700; font-size: 13px; color: #0b2a4a; }
+
+input, select {
+  width: 100%;
+  border: 1px solid #e6eef7;
+  border-radius: 12px;
+  padding: 10px 12px;
+  outline: none;
+}
+input:focus, select:focus { border-color: #0b3a6a; }
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 800;
+}
+.btn.primary { background: #0b3a6a; color: #fff; }
+.btn.primary:hover { filter: brightness(1.05); }
+.btn.ghost { background: #eef2f7; color: #0b2a4a; }
+
+.auto { position: relative; }
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e6eef7;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.12);
+
+  z-index: 999999;     /* 👈 sube bastante */
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.opt {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.opt:hover { background: #f4f8ff; }
+
+.line1 { font-weight: 800; font-size: 14px; color: #0b2a4a; }
+.line2 { font-size: 12px; color: #6b7280; margin-top: 2px; }
+
+.hint { font-size: 12px; color: #6b7280; }

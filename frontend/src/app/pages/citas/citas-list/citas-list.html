@@ -1,0 +1,67 @@
+<div class="card">
+  <h2 class="title">Citas</h2>
+
+  <div class="top-actions">
+    <button class="new" (click)="openNew()">+ Nueva cita</button>
+  </div>
+
+  <div class="toolbar">
+    <input
+      [(ngModel)]="q"
+      type="text"
+      placeholder="Buscar por paciente, médico, estado o motivo"
+      (keyup.enter)="buscar()"
+    />
+    <button (click)="buscar()">Buscar</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Cargando...</div>
+
+  <table *ngIf="!loading && data.length">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Paciente</th>
+        <th>Médico</th>
+        <th>Especialidad</th>
+        <th>Motivo</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let c of data">
+        <td>{{ c.id }}</td>
+        <td>{{ c.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ c.paciente_nombre }}</td>
+        <td>{{ c.medico_nombre }}</td>
+        <td>{{ c.medico_especialidad }}</td>
+        <td>{{ c.motivo || '-' }}</td>
+        <td>
+          <span class="badge" [class.empty]="!c.estado">{{ c.estado || '—' }}</span>
+        </td>
+        <td class="actions">
+          <button class="btn" (click)="openEdit(c)">Editar</button>
+          <button class="btn danger" (click)="eliminar(c)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && data.length === 0" class="muted">Sin resultados</div>
+</div>
+
+<app-citas-form
+  [open]="modalOpen"
+  [editing]="editing"
+  (closed)="closeModal()"
+  (saved)="refresh()"
+></app-citas-form>
+
+<app-success-modal
+  [open]="successOpen"
+  [message]="successMessage"
+  (closed)="successOpen = false"
+></app-success-modal>
