@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Pacientes, Paciente } from '../../../services/pacientes';
 import { PacientesForm } from '../pacientes-form/pacientes-form';
 import { SuccessModal } from '../../../shared/success-modal/success-modal';
+import { Router } from '@angular/router';
+
 
 
 
@@ -29,6 +31,7 @@ successMessage = 'Paciente registrado correctamente';
 
   constructor(
     private pacientes: Pacientes,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId: object,
     private cdr: ChangeDetectorRef
   ) {}
@@ -77,6 +80,11 @@ successMessage = 'Paciente registrado correctamente';
   this.modalOpen = false;
   this.successOpen = true;
   this.buscar();
+}
+
+
+verHistorial(p: any) {
+  this.router.navigate(['/pacientes', p.id, 'historial']);
 }
 
   eliminar(p: Paciente) {

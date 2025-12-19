@@ -34,10 +34,11 @@
         <td>{{ p.nombre }} {{ p.apellido }}</td>
         <td>{{ p.ci || '-' }}</td>
         <td>{{ p.telefono || '-' }}</td>
-        <td class="actions">
-          <button (click)="openEdit(p)">Editar</button>
-          <button (click)="eliminar(p)">Eliminar</button>
-        </td>
+              <td class="actions">
+        <button class="secondary" (click)="verHistorial(p)">Historial</button>
+        <button (click)="openEdit(p)">Editar</button>
+        <button class="danger" (click)="eliminar(p)">Eliminar</button>
+      </td>
       </tr>
     </tbody>
   </table>

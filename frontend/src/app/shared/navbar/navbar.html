@@ -10,8 +10,12 @@
       Pacientes
     </a>
 
+    <!-- ✅ Nuevo: Historial Médico (entra por pacientes) -->
+    <a routerLink="/pacientes" routerLinkActive="active">
+      Historial Médico
+    </a>
+
     <a routerLink="/medicos" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Médicos</a>
     <a routerLink="/citas" routerLinkActive="active">Citas</a>
-
   </div>
 </nav>

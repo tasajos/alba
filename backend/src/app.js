@@ -20,7 +20,7 @@ const stockRoutes = require("./routes/stock.routes");
 const recetasRoutes = require("./routes/recetas.routes");
 const examenesRoutes = require("./routes/examenes.routes");
 const ordenesLabRoutes = require("./routes/ordeneslab.routes");
-
+const historialRoutes = require("./routes/historial.routes");
 
 const errorHandler = require("./middlewares/errorHandler");
 
@@ -35,7 +35,6 @@ app.get("/api/health", (req, res) => res.json({ ok: true, name: "ALBA API" }));
 
 // Rutas
 app.use("/api/pacientes", pacientesRoutes);
-app.use("/api/medicos", medicosRoutes);
 app.use("/api/citas", citasRoutes);
 
 app.use("/api/consultas", consultasRoutes);
@@ -50,6 +49,7 @@ app.use("/api/recetas", recetasRoutes);
 app.use("/api/examenes", examenesRoutes);
 app.use("/api/lab/ordenes", ordenesLabRoutes);
 app.use('/api/medicos', medicosRoutes);
+app.use("/api/historial", historialRoutes);
 
 app.use("/api", require("./routes/dashboard.routes"));
 

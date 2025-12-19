@@ -110,3 +110,20 @@ tbody td {
 .actions button:hover {
   background: #e2e8f0;
 }
+
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+button.secondary {
+  background: #eef4ff;
+  border: 1px solid #cfe0ff;
+}
+
+button.danger {
+  background: #ffecec;
+  border: 1px solid #ffb7b7;
+}
