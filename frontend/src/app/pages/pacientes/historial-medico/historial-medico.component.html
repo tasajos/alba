@@ -1,0 +1,233 @@
+<div class="hm-page">
+  <div class="hm-container">
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="hm-loading">
+      <div class="hm-spinner"></div>
+      <div class="hm-loading-text">Cargando historial médico…</div>
+    </div>
+
+    <ng-container *ngIf="!loading && historial as h">
+
+      <!-- Header / Perfil -->
+      <section class="hm-card hm-header">
+        <div class="hm-header-left">
+          <div class="hm-title">
+            <span class="hm-title-label">Historial Médico</span>
+            <h2 class="hm-title-name">{{ h.paciente?.nombre }} {{ h.paciente?.apellido }}</h2>
+          </div>
+
+          <div class="hm-meta">
+            <span class="hm-chip">CI: <strong>{{ h.paciente?.ci || '—' }}</strong></span>
+            <span class="hm-chip">Tel: <strong>{{ h.paciente?.telefono || '—' }}</strong></span>
+            <span class="hm-chip">Paciente ID: <strong>{{ h.paciente?.id || '—' }}</strong></span>
+          </div>
+        </div>
+
+        <div class="hm-stats">
+          <div class="hm-stat">
+            <div class="hm-stat-value">{{ h.resumen?.citas?.total || 0 }}</div>
+            <div class="hm-stat-label">Citas</div>
+          </div>
+          <div class="hm-stat hm-ok">
+            <div class="hm-stat-value">{{ h.resumen?.citas?.atendidas || 0 }}</div>
+            <div class="hm-stat-label">Atendidas</div>
+          </div>
+          <div class="hm-stat hm-warn">
+            <div class="hm-stat-value">{{ h.resumen?.citas?.programadas || 0 }}</div>
+            <div class="hm-stat-label">Programadas</div>
+          </div>
+          <div class="hm-stat hm-bad">
+            <div class="hm-stat-value">{{ h.resumen?.citas?.noAsistio || 0 }}</div>
+            <div class="hm-stat-label">No asistió</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabs -->
+      <section class="hm-tabs">
+        <button class="hm-tab" [class.active]="tab==='citas'" (click)="tab='citas'">
+          Citas
+          <span class="hm-pill">{{ (h.data?.citas?.length || 0) }}</span>
+        </button>
+
+        <button class="hm-tab" [class.active]="tab==='consultas'" (click)="tab='consultas'">
+          Diagnósticos
+          <span class="hm-pill">{{ (h.data?.consultas?.length || 0) }}</span>
+        </button>
+
+        <button class="hm-tab" [class.active]="tab==='recetas'" (click)="tab='recetas'">
+          Recetas
+          <span class="hm-pill">{{ (h.data?.recetas?.length || 0) }}</span>
+        </button>
+
+        <button class="hm-tab" [class.active]="tab==='ordenesLab'" (click)="tab='ordenesLab'">
+          Órdenes Lab
+          <span class="hm-pill">{{ (h.data?.ordenesLab?.length || 0) }}</span>
+        </button>
+
+        <div class="hm-tabs-spacer"></div>
+
+        <button class="hm-btn hm-btn-ghost" (click)="cargar()">
+          ↻ Refrescar
+        </button>
+      </section>
+
+      <!-- Panel: CITAS -->
+      <section *ngIf="tab==='citas'" class="hm-card hm-panel">
+        <div class="hm-panel-header">
+          <div class="hm-panel-title">Listado de Citas</div>
+
+          <div class="hm-filters">
+            <div class="hm-field">
+              <label>Buscar</label>
+              <input class="hm-input" [(ngModel)]="q" placeholder="Motivo / estado / médico..." />
+            </div>
+
+            <div class="hm-field">
+              <label>Estado</label>
+              <select class="hm-select" [(ngModel)]="filtroCitas">
+                <option value="TODAS">Todas</option>
+                <option value="PROGRAMADA">Programadas</option>
+                <option value="ATENDIDA">Atendidas</option>
+                <option value="NO_ASISTIO">No asistió</option>
+                <option value="CANCELADA">Canceladas</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="hm-table-wrap">
+          <table class="hm-table">
+            <thead>
+              <tr>
+                <th style="width: 140px;">Fecha</th>
+                <th style="width: 90px;">Hora</th>
+                <th>Médico</th>
+                <th>Motivo</th>
+                <th style="width: 150px;">Estado</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let c of citasFiltradas">
+                <td>{{ c.fecha | date:'yyyy-MM-dd' }}</td>
+                <td class="muted">{{ c.hora || '—' }}</td>
+                <td class="muted">ID: {{ c.medico_id }}</td>
+                <td>{{ c.motivo || '—' }}</td>
+                <td>
+                  <span class="hm-badge"
+                        [ngClass]="{
+                          'b-warn': c.estado_normalizado==='PROGRAMADA',
+                          'b-ok': c.estado_normalizado==='ATENDIDA',
+                          'b-bad': c.estado_normalizado==='NO_ASISTIO',
+                          'b-gray': c.estado_normalizado==='CANCELADA' || c.estado_normalizado==='DESCONOCIDO'
+                        }">
+                    {{ c.estado_normalizado || c.estado || '—' }}
+                  </span>
+                </td>
+              </tr>
+
+              <tr *ngIf="citasFiltradas.length===0">
+                <td colspan="5" class="hm-empty">
+                  No hay citas que coincidan con el filtro.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel: CONSULTAS -->
+      <section *ngIf="tab==='consultas'" class="hm-card hm-panel">
+        <div class="hm-panel-header">
+          <div class="hm-panel-title">Diagnósticos / Consultas</div>
+        </div>
+
+        <div *ngIf="h.data.consultas.length===0" class="hm-empty-block">
+          No hay diagnósticos/consultas registrados.
+        </div>
+
+        <div class="hm-list" *ngIf="h.data.consultas.length>0">
+          <article class="hm-item" *ngFor="let con of h.data.consultas">
+            <div class="hm-item-top">
+              <div class="hm-item-date">
+                {{ con.fecha | date:'yyyy-MM-dd' }}
+                <span class="muted">· Médico ID: {{ con.medico_id }}</span>
+              </div>
+              <span class="hm-tag">Cita #{{ con.cita_id || '—' }}</span>
+            </div>
+
+            <div class="hm-item-body">
+              <div><strong>Diagnóstico:</strong> {{ con.diagnostico || '—' }}</div>
+              <div class="muted"><strong>Observaciones:</strong> {{ con.observaciones || '—' }}</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Panel: RECETAS -->
+      <section *ngIf="tab==='recetas'" class="hm-card hm-panel">
+        <div class="hm-panel-header">
+          <div class="hm-panel-title">Recetas</div>
+        </div>
+
+        <div *ngIf="h.data.recetas.length===0" class="hm-empty-block">
+          No hay recetas registradas.
+        </div>
+
+        <div class="hm-list" *ngIf="h.data.recetas.length>0">
+          <article class="hm-item" *ngFor="let r of h.data.recetas">
+            <div class="hm-item-top">
+              <div class="hm-item-date">
+                {{ r.created_at | date:'yyyy-MM-dd' }}
+                <span class="muted">· Consulta #{{ r.consulta_id }}</span>
+              </div>
+              <span class="hm-tag">Receta #{{ r.id }}</span>
+            </div>
+
+            <div class="hm-item-body muted">
+              (Pendiente: aquí mostraremos medicamentos/indicaciones cuando ampliemos tu tabla recetas)
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Panel: ÓRDENES LAB -->
+      <section *ngIf="tab==='ordenesLab'" class="hm-card hm-panel">
+        <div class="hm-panel-header">
+          <div class="hm-panel-title">Órdenes de Laboratorio</div>
+        </div>
+
+        <div *ngIf="h.data.ordenesLab.length===0" class="hm-empty-block">
+          No hay órdenes de laboratorio registradas.
+        </div>
+
+        <div class="hm-list" *ngIf="h.data.ordenesLab.length>0">
+          <article class="hm-item" *ngFor="let o of h.data.ordenesLab">
+            <div class="hm-item-top">
+              <div class="hm-item-date">
+                {{ o.created_at | date:'yyyy-MM-dd' }}
+                <span class="muted">· Consulta #{{ o.consulta_id }}</span>
+              </div>
+
+              <span class="hm-badge"
+                    [ngClass]="{
+                      'b-ok': (o.estado||'').toUpperCase()==='COMPLETADO',
+                      'b-warn': (o.estado||'').toUpperCase()==='PENDIENTE',
+                      'b-gray': true
+                    }">
+                {{ o.estado || '—' }}
+              </span>
+            </div>
+
+            <div class="hm-item-body muted">
+              (Pendiente: aquí listaremos exámenes cuando creemos ordenes_laboratorio_detalle)
+            </div>
+          </article>
+        </div>
+      </section>
+
+    </ng-container>
+  </div>
+</div>
