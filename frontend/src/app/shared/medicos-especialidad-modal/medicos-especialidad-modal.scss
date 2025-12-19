@@ -1,0 +1,87 @@
+/* ✅ Importante: el host NO debe tapar la pantalla */
+:host {
+  display: contents; /* o display:block; pero NO position:fixed */
+}
+
+.backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 16px;
+}
+
+.modal{
+  width: min(760px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.25);
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #eef2f7;
+
+  h3{ margin:0; font-size:18px; font-weight:900; color:#0b2a4a; }
+  .sub{ margin:6px 0 0 0; font-size:12px; color:#64748b; font-weight:700; }
+}
+
+.x{
+  border:0;
+  background: transparent;
+  cursor:pointer;
+  font-size:18px;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+.x:hover{ background:#f2f6ff; }
+
+.body{
+  padding: 14px 18px;
+  overflow: auto;
+}
+
+.list{
+  display: grid;
+  gap: 10px;
+}
+
+.item{
+  border: 1px solid #eef2f7;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f8fbff;
+}
+
+.name{ font-weight: 900; color:#0b2a4a; }
+.meta{ margin-top: 4px; font-size: 12px; color:#64748b; }
+
+.foot{
+  padding: 14px 18px;
+  border-top: 1px solid #eef2f7;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:900;
+}
+.btn.ghost{ background:#eef2f7; color:#0b2a4a; }

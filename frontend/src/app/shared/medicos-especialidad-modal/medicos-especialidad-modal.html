@@ -1,0 +1,34 @@
+<ng-container *ngIf="open">
+  <div class="backdrop" (click)="close()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="head">
+        <div>
+          <h3>Médicos — {{ especialidad }}</h3>
+          <p class="sub" *ngIf="!loading">{{ data.length }} encontrado(s)</p>
+        </div>
+        <button class="x" type="button" (click)="close()">✕</button>
+      </div>
+
+      <div class="body">
+        <div *ngIf="loading" class="muted">Cargando…</div>
+
+        <div *ngIf="!loading && !data.length" class="muted">
+          No hay médicos para esta especialidad.
+        </div>
+
+        <div class="list" *ngIf="!loading && data.length">
+          <div class="item" *ngFor="let m of data">
+            <div class="name">{{ m.nombre }} {{ m.apellido }}</div>
+            <div class="meta">
+              CI: {{ m.ci || '-' }} · Tel: {{ m.telefono || '-' }} · Email: {{ m.email || '-' }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot">
+        <button class="btn ghost" type="button" (click)="close()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</ng-container>
