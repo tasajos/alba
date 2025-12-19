@@ -113,7 +113,14 @@
               <tr *ngFor="let c of citasFiltradas">
                 <td>{{ c.fecha | date:'yyyy-MM-dd' }}</td>
                 <td class="muted">{{ c.hora || '—' }}</td>
-                <td class="muted">ID: {{ c.medico_id }}</td>
+               <td>
+                <div class="doc-name">
+                    {{ c.medico_display || (c.medico_nombre + ' ' + c.medico_apellido) || '—' }}
+                    </div>
+                    <div class="doc-spec">
+                        {{ c.medico_especialidad || '—' }}
+                    </div>
+                    </td>
                 <td>{{ c.motivo || '—' }}</td>
                 <td>
                   <span class="hm-badge"
