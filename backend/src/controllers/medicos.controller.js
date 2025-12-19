@@ -95,3 +95,56 @@ exports.eliminar = async (req, res) => {
     return res.status(500).json({ ok: false, error: "Error en la base de datos" });
   }
 };
+
+
+
+exports.listarPorEspecialidad = async (req, res) => {
+  try {
+    const especialidad = (req.params.especialidad || "").trim();
+    if (!especialidad) {
+      return res.status(400).json({ ok: false, message: "especialidad requerida" });
+    }
+
+    const [rows] = await db.query(
+      `
+      SELECT id, nombre, apellido, ci, telefono, email, especialidad, created_at
+      FROM medicos
+      WHERE LOWER(especialidad) = LOWER(?)
+      ORDER BY apellido ASC, nombre ASC
+      `,
+      [especialidad]
+    );
+
+    res.json({ ok: true, data: rows });
+  } catch (e) {
+    console.error("listarPorEspecialidad ERROR:", e);
+    res.status(500).json({ ok: false, message: "Error listando médicos por especialidad" });
+  }
+};
+
+
+// GET /medicos/por-especialidad/:especialidad
+exports.listarPorEspecialidad = async (req, res) => {
+  try {
+    const especialidad = (req.params.especialidad || "").trim();
+
+    if (!especialidad) {
+      return res.status(400).json({ ok: false, message: "especialidad requerida" });
+    }
+
+    const [rows] = await db.query(
+      `
+      SELECT id, nombre, apellido, ci, telefono, email, especialidad, created_at
+      FROM medicos
+      WHERE LOWER(especialidad) = LOWER(?)
+      ORDER BY apellido ASC, nombre ASC
+      `,
+      [especialidad]
+    );
+
+    res.json({ ok: true, data: rows });
+  } catch (e) {
+    console.error("listarPorEspecialidad ERROR:", e);
+    res.status(500).json({ ok: false, message: "Error listando médicos por especialidad" });
+  }
+};

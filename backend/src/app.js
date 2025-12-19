@@ -51,6 +51,8 @@ app.use("/api/examenes", examenesRoutes);
 app.use("/api/lab/ordenes", ordenesLabRoutes);
 app.use('/api/medicos', medicosRoutes);
 
+app.use("/api", require("./routes/dashboard.routes"));
+
 // Error handler (al final)
 app.use(errorHandler);
 

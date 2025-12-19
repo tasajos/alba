@@ -1,37 +1,62 @@
 import { Injectable } from '@angular/core';
-import { Api } from './api';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
 
+/* =======================
+   Interfaces
+======================= */
 export interface Medico {
   id: number;
   nombre: string;
   apellido: string;
-  ci?: string;
-  especialidad: string;
-  telefono?: string;
-  email?: string;
+  ci?: string | null;
+  especialidad?: string | null;
+  telefono?: string | null;
+  email?: string | null;
   created_at?: string;
 }
 
-export type MedicoCreate = Omit<Medico, 'id' | 'created_at'>;
-export type MedicoUpdate = Partial<MedicoCreate>;
+export interface MedicoCreate {
+  nombre: string;
+  apellido: string;
+  ci: string;
+  especialidad: string;
+  telefono?: string | null;
+  email?: string | null;
+}
 
+/* =======================
+   Service
+======================= */
 @Injectable({ providedIn: 'root' })
 export class Medicos {
-  constructor(private api: Api) {}
+  private baseUrl = environment.apiUrl; // ej: http://localhost:5000/api
 
-  listar(q?: string) {
-    return this.api.get<{ ok: boolean; data: Medico[] }>('/medicos', q ? { q } : undefined);
+  constructor(private http: HttpClient) {}
+
+  listar(q = ''): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/medicos`, {
+      params: { q },
+    });
   }
 
-  crear(payload: MedicoCreate) {
-    return this.api.post<{ ok: boolean; id: number }>('/medicos', payload);
+  crear(payload: MedicoCreate): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/medicos`, payload);
   }
 
-  actualizar(id: number, payload: MedicoUpdate) {
-    return this.api.put<{ ok: boolean }>(`/medicos/${id}`, payload);
+  actualizar(id: number, payload: MedicoCreate): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/medicos/${id}`, payload);
   }
 
-  eliminar(id: number) {
-    return this.api.delete<{ ok: boolean }>(`/medicos/${id}`);
+  eliminar(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/medicos/${id}`);
+  }
+
+  /* Dashboard */
+  listarPorEspecialidad(especialidad: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.baseUrl}/medicos/por-especialidad/${encodeURIComponent(especialidad)}`
+    );
   }
 }

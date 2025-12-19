@@ -1,4 +1,58 @@
 <div class="card">
-  <div class="h1">Dashboard - ALBA</div>
-  <div>Estado API: <b>{{ status }}</b></div>
+  <div class="head">
+    <h2>Dashboard - ALBA</h2>
+    <button class="btn ghost" (click)="cargar()">Actualizar</button>
+  </div>
+
+  <div *ngIf="loading" class="muted">Cargando…</div>
+
+  <div *ngIf="!loading && data" class="grid">
+    <div class="kpi">
+      <div class="kpi-title">Pacientes</div>
+      <div class="kpi-value">{{ data.pacientes }}</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-title">Médicos</div>
+      <div class="kpi-value">{{ data.medicos }}</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-title">Citas PROGRAMADAS</div>
+      <div class="kpi-value">{{ data.citas_programadas }}</div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && data" class="box">
+    <h3>Médicos por especialidad</h3>
+
+   <table *ngIf="data.medicos_por_especialidad.length">
+      <thead>
+        <tr>
+          <th>Especialidad</th>
+          <th style="width:140px;">Cantidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of data.medicos_por_especialidad">
+          <td>{{ e.especialidad }}</td>
+    <td>
+  <button class="pill" type="button" (click)="openEspecialidad(e.especialidad)">
+    {{ e.total }}
+  </button>
+</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!data.medicos_por_especialidad.length" class="muted">
+      Sin datos.
+    </div>
+  </div>
 </div>
+
+<app-medicos-especialidad-modal
+  [open]="espModalOpen"
+  [especialidad]="espSeleccionada"
+  (closed)="closeEspecialidad()"
+></app-medicos-especialidad-modal>
